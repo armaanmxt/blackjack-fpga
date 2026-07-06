@@ -1,35 +1,59 @@
 # Blackjack FPGA Architecture
 
-## Overview
+## Version 1 Goal
 
-The design is divided into independent hardware modules.
+Implement a simplified Blackjack game on the Basys 3 FPGA.
 
-Each module performs one specific task.
-
-The top module connects every subsystem together.
+The player can reset, hit, and stand. The dealer automatically plays after the player stands. The FPGA determines the winner.
 
 ---
 
-## Planned Modules
+## Hardware Inputs
 
-- Clock Divider
-- Debouncer
-- Edge Detector
-- Random Card Generator
-- Hand Memory
-- Score Calculator
-- Dealer Logic
-- Blackjack FSM
-- Display Driver
-- Seven Segment Driver
+| Input | Purpose |
+|---|---|
+| clk | 100 MHz Basys 3 clock |
+| btnC | Reset / new game |
+| btnU | Hit |
+| btnR | Stand |
 
 ---
 
-## Development Strategy
+## Hardware Outputs
 
-Each module will be:
+| Output | Purpose |
+|---|---|
+| led[15:0] | Debug/game state display |
+| seg[6:0] | Seven-segment digit segments |
+| an[3:0] | Seven-segment digit enables |
+| dp | Decimal point |
 
-- Designed
-- Simulated
-- Verified
-- Integrated
+---
+
+## Main Modules
+
+| Module | Job |
+|---|---|
+| top.v | Connects the whole design |
+| button_conditioner.v | Cleans button presses |
+| random_card.v | Generates card values from 1 to 10 |
+| hand_manager.v | Stores player/dealer totals |
+| blackjack_fsm.v | Controls game flow |
+| sevenseg_driver.v | Displays scores/status |
+
+---
+
+## Simplified Data Flow
+
+```text
+Buttons
+   ↓
+button_conditioner
+   ↓
+blackjack_fsm
+   ↓
+hand_manager ← random_card
+   ↓
+sevenseg_driver
+   ↓
+Basys 3 display
