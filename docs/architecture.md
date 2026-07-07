@@ -36,8 +36,9 @@ The player can reset, hit, and stand. The dealer automatically plays after the p
 |---|---|
 | top.v | Connects the whole design |
 | button_conditioner.v | Cleans button presses |
-| random_card.v | Generates card values from 1 to 10 |
-| hand_manager.v | Stores player/dealer totals |
+| random_card.v | Generates card values from 1 to 11 |
+| hand_manager.v | Stores player/dealer cards |
+| score_calculator.v | Calculates player/dealer scores |
 | blackjack_fsm.v | Controls game flow |
 | sevenseg_driver.v | Displays scores/status |
 
@@ -54,10 +55,14 @@ blackjack_fsm
    ↓
 hand_manager ← random_card
    ↓
+score_calculator
+   ↓
 sevenseg_driver
    ↓
 Basys 3 display
+```
 
+---
 
 ## Card Representation
 
@@ -75,6 +80,7 @@ Suits are ignored in Version 1.
 
 This keeps the first version focused on RTL design, FSM control, score calculation, simulation, and FPGA integration.
 
+---
 
 ## Top-Level Block Diagram
 
@@ -123,10 +129,10 @@ btnR ----------->|                |
                                            +-------+-------+
                                                    |
                                            seg, an, led
+```
 
+---
 
-
-```markdown
 ## Module Responsibilities
 
 | Module | Type | Responsibility |
